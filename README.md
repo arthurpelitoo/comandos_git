@@ -26,6 +26,30 @@ git branch -m novo-nome
 
 ---
 
+## Sincronizar branches (GitFlow)
+
+Situações comuns: hotfix mergeado na `main` precisa voltar pra `dev`,
+ou `dev` ficou pra trás em relação à `main`.
+
+```bash
+# Atualizar dev com o que foi mergeado na main (via PR/hotfix)
+git checkout dev
+git fetch origin          # atualiza o estado do remoto localmente
+git merge origin/main     # traz as mudanças da main remota pra dev
+git push                  # sobe a dev atualizada
+
+# Alternativa: rebase (histórico mais linear, sem commit de merge)
+git checkout dev
+git fetch origin
+git rebase origin/main
+git push --force-with-lease   # necessário após rebase
+```
+
+> No GitFlow: `hotfix` → merge na `main` → merge na `dev`.
+> Sempre usar `fetch` antes do merge para pegar o estado real do remoto.
+
+---
+
 ## Desfazer alterações
 
 ```bash
